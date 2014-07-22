@@ -34,7 +34,13 @@
 		$signedRequest = $_GET['signed_payload'];
 		$valid = verify($signedRequest);
 		if ($valid) {
-			//TO DO: Get $accessToken from $storeHash = $valid->store_hash;
+			//Get $accessToken from $storeHash = $valid->store_hash;
+			$select = self::$pdo->prepare( 'SELECT * FROM merchants WHERE storeHash = :storeHash LIMIT 1');
+			$select->bindParam(':storeHash', $valid->store_hash);
+			$select->execute();
+			$resultArray = $select->fetchAll();
+			$storeHash = $resultArray['storeHash'];
+			$accessToken = $resultArray['accessToken'];
 			SessionHelper::secSessionStart();
 			$_SESSION['storeHash'] = $storeHash;
 			$_SESSION['accessToken'] = $accessToken;

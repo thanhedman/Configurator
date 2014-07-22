@@ -20,8 +20,11 @@
 		'accessToken' => $response->access_token
 	);
 
-	//TO DO: store $merchantArray
+	//store $merchantArray
 	$paramArray = array($merchantArray['store_hash'], $merchantArray['accessToken']);
+	$insert = self::$pdo->prepare(	'INSERT INTO merchants (storeHash, accessToken) VALUES (?, ?)' );
+	$insert->execute($paramArray);
+
 
 	//Do first time configuration stuff
 	$connection = new Connection( CLIENT_ID, $merchantArray['storeHash'], $merchantArray['accessToken'] );
